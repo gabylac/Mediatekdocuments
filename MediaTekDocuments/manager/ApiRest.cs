@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net.Http;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace MediaTekDocuments.manager
@@ -16,7 +17,7 @@ namespace MediaTekDocuments.manager
         /// <summary>
         /// Objet de connexion à l'api
         /// </summary>
-        private readonly HttpClient httpClient;
+        private readonly HttpClient httpClient;        
         /// <summary>
         /// Canal http pour l'envoi du message et la récupération de la réponse
         /// </summary>
@@ -89,6 +90,7 @@ namespace MediaTekDocuments.manager
             }
             // récupération de l'information retournée par l'api
             return httpResponse.Content.ReadAsAsync<JObject>().Result;
+            
         }
 
     }
