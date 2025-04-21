@@ -284,7 +284,7 @@ namespace MediaTekDocuments.dal
         }
 
         /// <summary>
-        /// ecriture d'une commande ne base de données
+        /// ecriture d'une commande en base de données
         /// </summary>
         /// <param name="commande">commande à insérer</param>
         /// <returns>true si l'insertion a pu se faire</returns>
@@ -364,6 +364,57 @@ namespace MediaTekDocuments.dal
                 Console.WriteLine(ex.Message);
             }
             return false;
+        }
+        
+        /// <summary>
+        /// retourne la liste des abonnements d'une revue
+        /// </summary>
+        /// <param name="idRevue">id de la revue concernée</param>
+        /// <returns>liste d'objets abonnement</returns>
+        public List<Abonnement> GetAbonnementsRevue(string idRevue)
+        {
+            String jsonIdRevue = convertToJson("idRevue", idRevue);
+            List<Abonnement> lesAbonnements = TraitementRecup<Abonnement>(GET, "abonnement/" + jsonIdRevue, null);
+            return lesAbonnements;
+        }
+
+        /// <summary>
+        /// écriture d'un abonnement en base de données
+        /// </summary>
+        /// <param name="abonnement">abonnement à insérer</param>
+        /// <returns>true si l'insertion a pu se faire</returns>
+        public bool CreerAbonnementRevue(Abonnement abonnement)
+        {
+            /*var data = new
+            {
+                abonnement.DateFinAbonnement,
+                abonnement.Revue.Id,
+                abonnement.IdCommande,
+                abonnement.DateCommande,
+                abonnement.Montant
+            };*/
+            String jsonAbonnement = JsonConvert.SerializeObject(abonnement, new CustomDateTimeConverter());
+
+            try
+            {
+                List<Abonnement> liste = TraitementRecup<Abonnement>(POST, "abonnement", "champs=" + jsonAbonnement);
+                return (liste != null);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// retourne tous les abonnements à partir de la BDD
+        /// </summary>
+        /// <returns>liste d'objets abonnement</returns>
+        public List<Abonnement> GetAbonnements()
+        {
+            List<Abonnement> lesAbonnements = TraitementRecup<Abonnement>(GET, "abonnement", null);
+            return lesAbonnements;
         }
     }
 }

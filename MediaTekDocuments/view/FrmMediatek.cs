@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Drawing;
 using System.IO;
+using System.Runtime.InteropServices;
 
 namespace MediaTekDocuments.view
 
@@ -63,7 +64,19 @@ namespace MediaTekDocuments.view
                 cbxStatut.SelectedIndex = -1;
                 cbxModifStatDvd.SelectedIndex = -1;
             }
-        }                
+        }
+        
+        public string NewIdCommande()
+        {
+            List<Commande> lesCommandes = new List<Commande>();
+            lesCommandes = controller.GetAllCommandes();
+            Commande lastCommande = lesCommandes.LastOrDefault();
+            string lastIdCommande = lastCommande.Id;
+            int lastIdCom = int.Parse(lastIdCommande);
+            lastIdCom++;
+            string idNewCom = lastIdCom.ToString("D5");
+            return idNewCom;
+        }
 
         #endregion
 
@@ -78,12 +91,12 @@ namespace MediaTekDocuments.view
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void TabLivres_Enter(object sender, EventArgs e)
-        {
+        {            
             lesLivres = controller.GetAllLivres();            
             RemplirComboCategorie(controller.GetAllGenres(), bdgGenres, cbxLivresGenres);
             RemplirComboCategorie(controller.GetAllPublics(), bdgPublics, cbxLivresPublics);
             RemplirComboCategorie(controller.GetAllRayons(), bdgRayons, cbxLivresRayons);
-            RemplirLivresListeComplete();
+            RemplirLivresListeComplete();            
         }
 
         /// <summary>
@@ -1404,12 +1417,8 @@ namespace MediaTekDocuments.view
             {
                 try
                 {
-                    //récupération de l'id de la dernière commande pour créer l'id de la nouvelle commande
-                    List<Commande> lesCommandes = new List<Commande>();
-                    lesCommandes = controller.GetAllCommandes();
-                    Commande lastCommande = lesCommandes.LastOrDefault();
-                    string lastIdCommande = lastCommande.Id;
-                    string id = (int.Parse(lastIdCommande)+1).ToString();
+                    //création de l'id de la nouvelle commande                    
+                    string id = NewIdCommande();
 
                     DateTime dateCommande = dtpDateCommande.Value;
                     double montant = double.Parse(txtbMontant.Text);                    
@@ -1504,7 +1513,8 @@ namespace MediaTekDocuments.view
             
         }
         #endregion
-        #region onglet commandeDvd
+
+        #region onglet CommandeDvd
         private readonly BindingSource bdgCommandesDvdListe = new BindingSource();
         private List<CommandeDocument> lesCommandesDvd = new List<CommandeDocument>();
 
@@ -1633,12 +1643,8 @@ namespace MediaTekDocuments.view
             {
                 try
                 {
-                    //récupération de l'id de la dernière commande pour créer l'id de la nouvelle commande
-                    List<Commande> lesCommandes = new List<Commande>();
-                    lesCommandes = controller.GetAllCommandes();
-                    Commande lastCommande = lesCommandes.LastOrDefault();
-                    string lastIdCommande = lastCommande.Id;
-                    string id = (int.Parse(lastIdCommande) + 1).ToString();
+                    //création de l'id de la nouvelle commande                    
+                    string id = NewIdCommande();
 
                     DateTime dateCommande = dtpComDvd.Value;
                     double montant = double.Parse(txtbMontantDvd.Text);
@@ -1744,6 +1750,220 @@ namespace MediaTekDocuments.view
 
         #endregion
 
+        #region AbonnementRevue
+        private readonly BindingSource bdgAbonnementRevueListe = new BindingSource();
+        private List<Abonnement> lesAbonnementsRevue = new List<Abonnement>();
 
+        /// <summary>
+        /// ouverture de l'onglet abonnement revue
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void tabAbonnementRevue_Enter(object sender, EventArgs e)
+        {
+            txtbNumRechRevue.Text = "";
+        }
+
+        /// <summary>
+        /// recherche d'une revue suite à la saisie de son numéro
+        /// affichage des informations et des commandes de la revue
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btnRechNumRevue_Click(object sender, EventArgs e)
+        {
+            if (!txtbNumRechRevue.Text.Equals(""))
+            {
+                Revue revue = lesRevues.Find(x => x.Id.Equals(txtbNumRechRevue.Text));
+                if (revue != null)
+                {
+                    AfficheAbonnementsListe();
+                    AfficheRevueDetails(revue);
+                }
+                else
+                {
+                    MessageBox.Show("le numéro saisi n'existe pas");
+                    txtbNumRechRevue.Text = "";
+                }
+
+            }
+            else
+            {
+                MessageBox.Show("saisir un numéro de livre");
+            }
+        }
+
+        /// <summary>
+        /// affiche les détails de la revue reçue en paramètre
+        /// </summary>
+        /// <param name="revue">objet revue concerné</param>
+        private void AfficheRevueDetails(Revue revue)
+        {
+            //affiche les détails de la revue
+            txtbTitreRevue.Text = revue.Titre;
+            txtbPeriodiciteRevue.Text = revue.Periodicite;
+            txtbDelaiDispoRevue.Text = revue.DelaiMiseADispo.ToString();
+            txtbGenreRevue.Text = revue.Genre;
+            txtbPublicRevue.Text = revue.Public;
+            txtbRayonRevue.Text = revue.Rayon;
+            txtbCheminImRevue.Text = revue.Image;
+            string image = revue.Image;
+            try
+            {
+                pctbImRevue.Image = Image.FromFile(image);
+            }
+            catch
+            {
+                pctbImRevue.Image = null;
+            }
+        }
+
+        /// <summary>
+        /// récupère la liste des abonnements d'une revue
+        /// </summary>
+        public void AfficheAbonnementsListe()
+        {
+            string idRevue = txtbNumRechRevue.Text;
+            lesAbonnementsRevue = controller.GetAbonnementsRevue(idRevue);
+            RemplirAbonnementsListeRevue(lesAbonnementsRevue);
+        }
+
+        /// <summary>
+        /// remplit le datagrid de la liste des abonnements d'une revue reçue en paramètre
+        /// </summary>
+        /// <param name="lesAbonnementsRevue">liste des abonnements de la revue concernée</param>
+        public void RemplirAbonnementsListeRevue(List<Abonnement> lesAbonnementsRevue)
+        {
+            if (lesAbonnementsRevue != null)
+            {
+                bdgAbonnementRevueListe.DataSource = lesAbonnementsRevue;
+                dgvListeAbonnRevue.DataSource = bdgAbonnementRevueListe;           
+                dgvListeAbonnRevue.Columns["id"].Visible = false;
+                dgvListeAbonnRevue.Columns["idRevue"].Visible = false;
+                dgvListeAbonnRevue.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+                dgvListeAbonnRevue.Columns["dateCommande"].DisplayIndex = 0;
+                dgvListeAbonnRevue.Columns["montant"].DisplayIndex = 2;
+            }
+            else
+            {
+                bdgCommandesLivreListe.DataSource = null;
+            }
+        }
+
+        /// <summary>
+        /// ajoute un abonnement à une revue
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btnEnrAbonnRevue_Click(object sender, EventArgs e)
+        {
+            if (!txtbNumRechRevue.Text.Equals(""))
+            {
+                try
+                {
+                    //création de l'id de la nouvelle commande                   
+                    string id = NewIdCommande();
+
+                    string idRevue = txtbNumRechRevue.Text;                    
+                    DateTime dateCommande = dtpDateComRevue.Value;
+                    DateTime dateFinAbonnement = dtpDateFinAbonn.Value;
+                    double montant = double.Parse(txtbMontantAbonnRevue.Text);
+                    Abonnement abonnement = new Abonnement(dateFinAbonnement, idRevue, id, dateCommande, montant);
+                    if (controller.CreerAbonnementRevue(abonnement))
+                    {
+                        AfficheAbonnementsListe();
+                        txtbMontantAbonnRevue.Text = "";
+                        dtpDateFinAbonn.Value = DateTime.Now;
+                        dtpDateComRevue.Value = DateTime.Now;
+                    }
+                }
+                catch(Exception ex)
+                {
+                    MessageBox.Show("le montant doit être numérique", "Information");
+                }
+                
+            }
+        }
+
+        /// <summary>
+        /// tri sur les titres des colonnes
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void dgvListeAbonnRevue_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            string titreColonne = dgvListeComLivre.Columns[e.ColumnIndex].HeaderText;
+            List<Abonnement> sortedList = new List<Abonnement>();
+            switch (titreColonne)
+            {
+                case "DateFinAbonnement":
+                    sortedList = lesAbonnementsRevue.OrderBy(o => o.DateFinAbonnement).Reverse().ToList();
+                    break;
+                case "DateCommande":
+                    sortedList = lesAbonnementsRevue.OrderBy(o => o.DateCommande).Reverse().ToList();
+                    break;
+                case "Montant":
+                    sortedList = lesAbonnementsRevue.OrderBy(o => o.Montant).ToList();
+                    break;                
+            }
+            RemplirAbonnementsListeRevue(sortedList);
+        }
+
+        /// <summary>
+        /// controle que la date de parution des exemplaires se trouve 
+        /// entre la date de la commande et de la fin de l'abonnement
+        /// avant de supprimer une commande d'une revue
+        /// </summary>
+        /// <param name="dateCommande">date de la commande concernée</param>
+        /// <param name="dateFinAbonnement">date de la fin d'abonnement de la revue</param>
+        /// <param name="dateParution">date de parution de l'exempplaire de la revue concerné</param>
+        /// <returns>true si la date de parution est comprise entre les 2</returns>
+        private bool ParutionDansAbonnement(DateTime dateCommande, DateTime dateFinAbonnement, DateTime dateParution)
+        {
+            if(dateParution.CompareTo(dateCommande) >= 0 && dateParution.CompareTo(dateFinAbonnement) < 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+               
+        }
+
+        /// <summary>
+        /// supprime la commande d'une revue à condition qu'aucun exemplaire n'y soit rattaché
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btnSupprAbonn_Click(object sender, EventArgs e)
+        {
+            Abonnement abonnementRevue = (Abonnement)bdgAbonnementRevueListe.List[bdgAbonnementRevueListe.Position];
+            string idAbonnSupp = abonnementRevue.Id;
+            string idRevue = txtbNumRechRevue.Text;
+            lesExemplaires = controller.GetExemplairesRevue(idRevue);
+            bool okSuppr = true;
+                          
+            foreach (Exemplaire unExemplaire in lesExemplaires)
+            {
+                DateTime dateParutionEx = unExemplaire.DateAchat;
+                if (ParutionDansAbonnement(abonnementRevue.DateCommande, abonnementRevue.DateFinAbonnement, dateParutionEx))
+                {
+                    okSuppr = false;
+                }
+            }
+            if (okSuppr)
+            {
+                controller.DeleteCommande(idAbonnSupp);
+                AfficheAbonnementsListe();
+            }
+            else
+            {
+                MessageBox.Show("Impossible de supprimer l'abonnement, des exemlaires y sont rattachés");
+            }                                
+            
+        }
+        #endregion
+                
     }
 }

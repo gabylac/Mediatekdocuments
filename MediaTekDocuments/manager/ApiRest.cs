@@ -89,8 +89,23 @@ namespace MediaTekDocuments.manager
                     return new JObject();
             }
             // récupération de l'information retournée par l'api
-            return httpResponse.Content.ReadAsAsync<JObject>().Result;
-            
+            //return httpResponse.Content.ReadAsAsync<JObject>().Result;
+            string contenu = httpResponse.Content.ReadAsStringAsync().Result;
+
+            // Debug : affiche ce que l'API a réellement renvoyé
+            Console.WriteLine("Contenu brut reçu : " + contenu);
+
+            try
+            {
+                return JObject.Parse(contenu); // Si c’est bien du JSON
+            }
+            catch (JsonReaderException)
+            {
+                Console.WriteLine("Le contenu retourné n'est pas un JSON valide !");
+                return null;
+            }
+
+
         }
 
     }

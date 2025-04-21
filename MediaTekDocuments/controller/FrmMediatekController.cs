@@ -165,5 +165,25 @@ namespace MediaTekDocuments.controller
         {
             return access.DeleteCommande(idCommande);
         }
+
+        /// <summary>
+        /// récupère la liste des abonnements d'une revue
+        /// </summary>
+        /// <param name="idRevue">id de la revue concernée</param>
+        /// <returns>liste d'objets abonnement</returns>
+        public List<Abonnement> GetAbonnementsRevue(string idRevue)
+        {
+            return access.GetAbonnementsRevue(idRevue);
+        }
+
+        /// <summary>
+        /// ajoute un abonnement à une revue
+        /// </summary>
+        /// <param name="abonnement">objet abonnement concerné</param>
+        /// <returns>true si l'ajout a pu se faire</returns>
+        public bool CreerAbonnementRevue(Abonnement abonnement)
+        {
+            return access.CreerAbonnementRevue(abonnement);
+        }               
     }
 }
