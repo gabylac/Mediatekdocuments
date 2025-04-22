@@ -137,7 +137,6 @@ namespace MediaTekDocuments.dal
             return lesRevues;
         }
 
-
         /// <summary>
         /// Retourne les exemplaires d'une revue
         /// </summary>
@@ -193,9 +192,9 @@ namespace MediaTekDocuments.dal
                     if (methode.Equals(GET))
                     {
                         String resultString = JsonConvert.SerializeObject(retour["result"]);
-                        // construction de la liste d'objets à partir du retour de l'api
-                        liste = JsonConvert.DeserializeObject<List<T>>(resultString, new CustomBooleanJsonConverter());
-                    }
+                        // construction de la liste d'objets à partir du retour de l'api                        
+                        liste = JsonConvert.DeserializeObject<List<T>>(resultString, new CustomBooleanJsonConverter());                        
+                    }                    
                 }
                 else
                 {
@@ -384,15 +383,7 @@ namespace MediaTekDocuments.dal
         /// <param name="abonnement">abonnement à insérer</param>
         /// <returns>true si l'insertion a pu se faire</returns>
         public bool CreerAbonnementRevue(Abonnement abonnement)
-        {
-            /*var data = new
-            {
-                abonnement.DateFinAbonnement,
-                abonnement.Revue.Id,
-                abonnement.IdCommande,
-                abonnement.DateCommande,
-                abonnement.Montant
-            };*/
+        {            
             String jsonAbonnement = JsonConvert.SerializeObject(abonnement, new CustomDateTimeConverter());
 
             try
@@ -415,6 +406,55 @@ namespace MediaTekDocuments.dal
         {
             List<Abonnement> lesAbonnements = TraitementRecup<Abonnement>(GET, "abonnement", null);
             return lesAbonnements;
+        }
+
+        /// <summary>
+        /// convertit en json un profil contenant les couples objet/valeur
+        /// login et pwd
+        /// </summary>
+        /// <param name="profil"></param>
+        /// <returns>les couples au format json</returns>
+        private string ConvertProfilToJson(Profil profil)
+        {
+            var dict = new Dictionary<string, string>
+        {
+            { "login", profil.Login },
+            { "pwd", profil.Pwd }
+        };
+            return JsonConvert.SerializeObject(dict);
+        }
+
+        /// <summary>
+        /// controle qu'un utilisateur est autorisé à se connecter
+        /// </summary>
+        /// <param name="profil">objet profil de l'utilisateur concerné</param>
+        /// <returns>liste d'objet users si l'utilisateur est présent dans la BDD</returns>
+        public List<Users> ControleAuthentification(Profil profil)
+        {
+            String jsonProfil = ConvertProfilToJson(profil);
+            try
+            {
+                List<Users> lesUsers = TraitementRecup<Users>(GET, "users/" + jsonProfil, null);
+                if(lesUsers != null && lesUsers.Count > 0)
+                {
+                    return lesUsers;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// retourne la liste des users à partir de la BDD
+        /// </summary>
+        /// <returns>liste d'objets users</returns>
+        public List<Users> GetAllUsers()
+        {
+            List<Users> lesUsers = TraitementRecup<Users>(GET, "users", null);
+            return lesUsers;
         }
     }
 }

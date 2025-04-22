@@ -25,6 +25,11 @@ namespace MediaTekDocuments.view
         private readonly BindingSource bdgSuivis = new BindingSource();
         private List<Suivi> lesSuivis = new List<Suivi>();
 
+        public GroupBox groupBoxRecExemplaire => grpReceptionExemplaire;
+        public TabPage tabComLivres => tabComLivre;
+        public TabPage tabComDVD => tabComDvd;
+        public TabPage tabAbonnement => tabAbonnementRevue;
+
         /// <summary>
         /// Constructeur : création du contrôleur lié à ce formulaire
         /// </summary>
