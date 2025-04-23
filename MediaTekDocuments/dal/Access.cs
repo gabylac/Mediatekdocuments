@@ -9,6 +9,7 @@ using System.Configuration;
 using System.Linq;
 using System.Xml.Linq;
 using System.Runtime.CompilerServices;
+using System.Diagnostics.Eventing.Reader;
 
 namespace MediaTekDocuments.dal
 {
@@ -44,17 +45,17 @@ namespace MediaTekDocuments.dal
         /// méthode http pour delete
         /// </summary>
         private const String DELETE = "DELETE";
-
+        
         /// <summary>
         /// Méthode privée pour créer un singleton
         /// initialise l'accès à l'API
         /// </summary>
         private Access()
         {
-            String authenticationString;
+            String authenticationString = null;
             try
             {
-                authenticationString = "admin:adminpwd";
+                authenticationString = ConfigurationManager.AppSettings["login"];
                 api = ApiRest.GetInstance(uriApi, authenticationString);
             }
             catch (Exception e)
