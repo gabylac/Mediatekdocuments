@@ -1,19 +1,12 @@
 ﻿using MediaTekDocuments.controller;
+using MediaTekDocuments.model;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Runtime;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using MediaTekDocuments.model;
 
 namespace MediaTekDocuments.view
 {
-    public partial class FrmAuthentification: Form
+    public partial class FrmAuthentification : Form
     {
         private readonly FrmAuthentificationController controller;
         public FrmAuthentification()
@@ -31,12 +24,12 @@ namespace MediaTekDocuments.view
         {
             String login = txtbLogin.Text;
             String pwd = txtbPwd.Text;
-            if(String.IsNullOrEmpty(login) || String.IsNullOrEmpty(pwd))
+            if (String.IsNullOrEmpty(login) || String.IsNullOrEmpty(pwd))
             {
                 MessageBox.Show("Tous les champs doivent être remplis", "Information");
-            }            
+            }
             Profil profil = new Profil(login, pwd);
-            List<Users> lesUsers = controller.ControleAuthentification(profil);                
+            List<Users> lesUsers = controller.ControleAuthentification(profil);
             if (lesUsers != null && lesUsers.Count > 0)
             {
                 Users userConnecte = lesUsers[0];
@@ -60,16 +53,16 @@ namespace MediaTekDocuments.view
                     else
                     {
                         MessageBox.Show("Vous n'êtes pas autorisé à accéder à l'application");
-                        Environment.Exit(0);                        
+                        Environment.Exit(0);
                     }
-                }                                                      
+                }
             }
             else
             {
                 MessageBox.Show("Authentification incorrecte ou vous n'êtes pas autorisé à vous connecter", "Alerte");
                 txtbLogin.Text = "";
                 txtbPwd.Text = "";
-            }                            
+            }
         }
     }
 }

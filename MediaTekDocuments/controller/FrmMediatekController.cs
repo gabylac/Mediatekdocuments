@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using MediaTekDocuments.dal;
 using MediaTekDocuments.model;
-using MediaTekDocuments.dal;
+using System.Collections.Generic;
 
 namespace MediaTekDocuments.controller
 {
@@ -184,6 +184,6 @@ namespace MediaTekDocuments.controller
         public bool CreerAbonnementRevue(Abonnement abonnement)
         {
             return access.CreerAbonnementRevue(abonnement);
-        }               
+        }
     }
 }

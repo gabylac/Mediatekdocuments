@@ -1,7 +1,7 @@
-﻿using System;
-using System.Net.Http;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System;
+using System.Net.Http;
 
 namespace MediaTekDocuments.manager
 {
@@ -17,7 +17,7 @@ namespace MediaTekDocuments.manager
         /// <summary>
         /// Objet de connexion à l'api
         /// </summary>
-        private readonly HttpClient httpClient;        
+        private readonly HttpClient httpClient;
         /// <summary>
         /// Canal http pour l'envoi du message et la récupération de la réponse
         /// </summary>
@@ -28,7 +28,7 @@ namespace MediaTekDocuments.manager
         /// </summary>
         /// <param name="uriApi">adresse de l'api</param>
         /// <param name="authenticationString">chaîne d'authentification</param>
-        private ApiRest(String uriApi, String authenticationString="")
+        private ApiRest(String uriApi, String authenticationString = "")
         {
             httpClient = new HttpClient() { BaseAddress = new Uri(uriApi) };
             // prise en compte dans l'url de l'authentificaiton (basic authorization), si elle n'est pas vide
@@ -47,7 +47,7 @@ namespace MediaTekDocuments.manager
         /// <returns></returns>
         public static ApiRest GetInstance(String uriApi, String authenticationString)
         {
-            if(instance == null)
+            if (instance == null)
             {
                 instance = new ApiRest(uriApi, authenticationString);
             }
@@ -65,7 +65,7 @@ namespace MediaTekDocuments.manager
         {
             // transformation des paramètres pour les mettre dans le body
             StringContent content = null;
-            if(!(parametres is null))
+            if (!(parametres is null))
             {
                 content = new StringContent(parametres, System.Text.Encoding.UTF8, "application/x-www-form-urlencoded");
             }
