@@ -1,5 +1,6 @@
 ﻿using MediaTekDocuments.controller;
 using MediaTekDocuments.model;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -142,6 +143,7 @@ namespace MediaTekDocuments.view
                 }
                 else
                 {
+                    Log.Information("Erreur lors de la saisie du numéro de document(introuvable). numero={0}", txbLivresNumRecherche.Text);
                     MessageBox.Show("numéro introuvable");
                     RemplirLivresListeComplete();
                 }
@@ -457,6 +459,7 @@ namespace MediaTekDocuments.view
                 }
                 else
                 {
+                    Log.Information("Erreur lors de la saisie du numéro de document(introuvable). numero={0}", txbDvdNumRecherche.Text);
                     MessageBox.Show("numéro introuvable");
                     RemplirDvdListeComplete();
                 }
@@ -771,6 +774,7 @@ namespace MediaTekDocuments.view
                 }
                 else
                 {
+                    Log.Information("Erreur lode la saisie du numero de document(introuvable). numero={0}", txbRevuesNumRecherche.Text);
                     MessageBox.Show("numéro introuvable");
                     RemplirRevuesListeComplete();
                 }
@@ -1079,6 +1083,7 @@ namespace MediaTekDocuments.view
                 }
                 else
                 {
+                    Log.Information("erreur lors de la saisie du numéro de document(introuvable). numero={0}", txbReceptionRevueNumero.Text);
                     MessageBox.Show("numéro introuvable");
                 }
             }
@@ -1209,11 +1214,13 @@ namespace MediaTekDocuments.view
                     }
                     else
                     {
+                        Log.Information("Erreur lors de la saisie du numéro de l'exemplaire, numero déjà existant. numero={0}", numero);
                         MessageBox.Show("numéro de publication déjà existant", "Erreur");
                     }
                 }
                 catch
                 {
+                    Log.Information("Erreur de convertion en int du numéro saisi. numero={0}", txbReceptionExemplaireNumero.Text);
                     MessageBox.Show("le numéro de parution doit être numérique", "Information");
                     txbReceptionExemplaireNumero.Text = "";
                     txbReceptionExemplaireNumero.Focus();
@@ -1221,6 +1228,7 @@ namespace MediaTekDocuments.view
             }
             else
             {
+                Log.Information("Erreur de saisie du numéro de l'exemplaire, le champ ne doit pas être vide. numero={0}", txbReceptionExemplaireNumero.Text);
                 MessageBox.Show("numéro de parution obligatoire", "Information");
             }
         }
@@ -1310,6 +1318,7 @@ namespace MediaTekDocuments.view
                 }
                 else
                 {
+                    Log.Information("Erreur lors de la saisie du numero du document(introuvable). numero={0}", txtbLivreRechercheNum.Text);
                     MessageBox.Show("le numéro saisi n'existe pas");
                     txtbLivreRechercheNum.Text = "";
                 }
@@ -1317,6 +1326,7 @@ namespace MediaTekDocuments.view
             }
             else
             {
+                Log.Information("Erreur le champ du numero de document est vide. numero={0}", txtbLivreRechercheNum.Text);
                 MessageBox.Show("saisir un numéro de livre");
             }
         }
@@ -1440,16 +1450,19 @@ namespace MediaTekDocuments.view
                     }
                     else
                     {
+                        Log.Information("Erreur lors de l'execution de la methode CreerCommandeDocument");
                         MessageBox.Show("création commande échouée", "Erreur");
                     }
                 }
                 catch
                 {
+                    Log.Information("Erreur de convertion des champs 'nombre exempalires' et 'montant'");
                     MessageBox.Show("le nombre d'exemplaires et le montant doivent être numériques", "Information");
                 }
             }
             else
             {
+                Log.Information("Erreur, le champ numero de document est vide. numero={0}", txtbLivreRechercheNum.Text);
                 MessageBox.Show("numéro de document obligatoire", "Information");
             }
 
@@ -1545,6 +1558,7 @@ namespace MediaTekDocuments.view
                 }
                 else
                 {
+                    Log.Information("Erreur lors de la saisie du numero du document(introuvable). numero={0}", txtbRechercheNum.Text);
                     MessageBox.Show("le numéro saisi n'existe pas");
                     txtbLivreRechercheNum.Text = "";
                 }
@@ -1552,6 +1566,7 @@ namespace MediaTekDocuments.view
             }
             else
             {
+                Log.Information("Erreur, le champ numero de document est vide. numero={0}", txtbRechercheNum.Text);
                 MessageBox.Show("saisir un numéro de dvd");
             }
         }
@@ -1660,16 +1675,19 @@ namespace MediaTekDocuments.view
                     }
                     else
                     {
+                        Log.Information("Erreur lors de l'execution de la méthode CreerCommandeDocument");
                         MessageBox.Show("création commande échouée", "Erreur");
                     }
                 }
                 catch
                 {
+                    Log.Information("Erreur de convertion des champs 'nombre exemplaires' et 'montant'");
                     MessageBox.Show("le nombre d'exemplaires et le montant doivent être numériques", "Information");
                 }
             }
             else
             {
+                Log.Information("Erreur, le champ numero de document est vide. numero={0}", txtbRechercheNum.Text);
                 MessageBox.Show("numéro de document obligatoire", "Information");
             }
         }
@@ -1780,7 +1798,8 @@ namespace MediaTekDocuments.view
             }
             else
             {
-                MessageBox.Show("saisir un numéro de livre");
+                Log.Information("Erreur, le champ numero de document est vide. numero={0}", txtbNumRechRevue.Text);
+                MessageBox.Show("saisir un numéro de revue");
             }
         }
 
@@ -1870,6 +1889,7 @@ namespace MediaTekDocuments.view
                 }
                 catch
                 {
+                    Log.Information("Erreur de convertion du montant en numérique. montant={0}", txtbMontantAbonnRevue.Text);
                     MessageBox.Show("le montant doit être numérique", "Information");
                 }
 
@@ -1942,6 +1962,7 @@ namespace MediaTekDocuments.view
             }
             else
             {
+                Log.Information("la méthode 'parutionDansAbonnement' n'est pas vraie");
                 MessageBox.Show("Impossible de supprimer l'abonnement, des exemlaires y sont rattachés");
             }
 

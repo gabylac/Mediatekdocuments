@@ -6,6 +6,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using Serilog;
 
 namespace MediaTekDocuments.dal
 {
@@ -47,15 +48,20 @@ namespace MediaTekDocuments.dal
         /// initialise l'accès à l'API
         /// </summary>
         private Access()
-        {
-            String authenticationString;
+        {            
+            String authenticationString = null;
             try
             {
+                Log.Logger = new LoggerConfiguration()
+                .MinimumLevel.Verbose()
+                .WriteTo.Console()
+                .WriteTo.File("logs/log.txt", rollingInterval: RollingInterval.Day)
+                .CreateLogger();
                 authenticationString = ConfigurationManager.AppSettings["login"];
                 api = ApiRest.GetInstance(uriApi, authenticationString);
             }
             catch (Exception e)
-            {
+            {                
                 Console.WriteLine(e.Message);
                 Environment.Exit(0);
             }
@@ -160,7 +166,7 @@ namespace MediaTekDocuments.dal
                 return (liste != null);
             }
             catch (Exception ex)
-            {
+            {                
                 Console.WriteLine(ex.Message);
             }
             return false;
