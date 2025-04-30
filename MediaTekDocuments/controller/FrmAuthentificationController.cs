@@ -4,9 +4,19 @@ using System.Collections.Generic;
 
 namespace MediaTekDocuments.controller
 {
+    /// <summary>
+    /// contrôleur de FrmAuthentificationController
+    /// </summary>
     class FrmAuthentificationController
     {
+        /// <summary>
+        /// objet d'accès aux données
+        /// </summary>
         private readonly Access access;
+
+        /// <summary>
+        /// récupération de l'instance unique d'accès aux données
+        /// </summary>
         public FrmAuthentificationController()
         {
             access = Access.GetInstance();

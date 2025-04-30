@@ -4,6 +4,9 @@ using System.Collections.Generic;
 
 namespace MediaTekDocuments.controller
 {
+    /// <summary>
+    /// contrôleur de FrmAlerteAbonnementController
+    /// </summary>
     class FrmAlerteAbonnementController
     {
         /// <summary>
@@ -22,12 +25,16 @@ namespace MediaTekDocuments.controller
         /// <summary>
         /// récupère la liste des abonnements
         /// </summary>
-        /// <returns></returns>
+        /// <returns>liste d'objets abonnement</returns>
         public List<Abonnement> GetAbonnements()
         {
             return access.GetAbonnements();
         }
 
+        /// <summary>
+        /// récupère la liste des revues
+        /// </summary>
+        /// <returns>liste d'objets revue</returns>
         public List<Revue> GetAllRevues()
         {
             return access.GetAllRevues();

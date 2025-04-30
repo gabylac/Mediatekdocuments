@@ -1,5 +1,6 @@
 ﻿using MediaTekDocuments.dal;
 using MediaTekDocuments.model;
+using System;
 using System.Collections.Generic;
 
 namespace MediaTekDocuments.controller
@@ -7,7 +8,7 @@ namespace MediaTekDocuments.controller
     /// <summary>
     /// Contrôleur lié à FrmMediatek
     /// </summary>
-    class FrmMediatekController
+    public class FrmMediatekController
     {
         /// <summary>
         /// Objet d'accès aux données
@@ -184,6 +185,27 @@ namespace MediaTekDocuments.controller
         public bool CreerAbonnementRevue(Abonnement abonnement)
         {
             return access.CreerAbonnementRevue(abonnement);
+        }
+
+        /// <summary>
+        /// controle que la date de parution des exemplaires se trouve 
+        /// entre la date de la commande et de la fin de l'abonnement
+        /// avant de supprimer une commande d'une revue
+        /// </summary>
+        /// <param name="dateCommande">date de la commande concernée</param>
+        /// <param name="dateFinAbonnement">date de la fin d'abonnement de la revue</param>
+        /// <param name="dateParution">date de parution de l'exempplaire de la revue concerné</param>
+        /// <returns>true si la date de parution est comprise entre les 2</returns>
+        public bool ParutionDansAbonnement(DateTime dateCommande, DateTime dateFinAbonnement, DateTime dateParution)
+        {
+            if (dateParution.CompareTo(dateCommande) >= 0 && dateParution.CompareTo(dateFinAbonnement) < 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }

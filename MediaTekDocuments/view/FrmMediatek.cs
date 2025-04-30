@@ -40,7 +40,7 @@ namespace MediaTekDocuments.view
         }
 
         /// <summary>
-        /// Rempli un des 3 combo (genre, public, rayon, suivi)
+        /// Rempli un des 3 combo (genre, public, rayon)
         /// </summary>
         /// <param name="lesCategories">liste des objets de type Genre ou Public ou Rayon</param>
         /// <param name="bdg">bindingsource contenant les informations</param>
@@ -71,6 +71,10 @@ namespace MediaTekDocuments.view
             }
         }
 
+        /// <summary>
+        /// création du nouvel id commande à partir du dernier
+        /// </summary>
+        /// <returns>id nouvelle commande</returns>
         public string NewIdCommande()
         {
             List<Commande> lesCommandes = controller.GetAllCommandes();
@@ -1220,7 +1224,7 @@ namespace MediaTekDocuments.view
                 }
                 catch
                 {
-                    Log.Information("Erreur de convertion en int du numéro saisi. numero={0}", txbReceptionExemplaireNumero.Text);
+                    Log.Information("Erreur de conversion en int du numéro saisi. numero={0}", txbReceptionExemplaireNumero.Text);
                     MessageBox.Show("le numéro de parution doit être numérique", "Information");
                     txbReceptionExemplaireNumero.Text = "";
                     txbReceptionExemplaireNumero.Focus();
@@ -1290,14 +1294,30 @@ namespace MediaTekDocuments.view
 
         /// <summary>
         /// ouverture de l'onglet commande livre
-        /// appel de la méthode qui remplit le combo suivi
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void tabCommandeLivre_Enter(object sender, EventArgs e)
+        private void tabComLivre_Enter(object sender, EventArgs e)
         {
             ChargerComboSuivi();
             txtbLivreRechercheNum.Text = "";
+            ViderZoneInfoLivre();
+        }
+
+        /// <summary>
+        /// vide les zones d'affichage des infos du livre
+        /// </summary>
+        private void ViderZoneInfoLivre()
+        {
+            txtbLivreTitre.Text = "";
+            txtbLivreRayon.Text = "";
+            txtbLivrePublic.Text = "";
+            txtbLivreIsbn.Text = "";
+            txtbLivreImage.Text = "";
+            txtbLivreGenre.Text = "";
+            txtbLivreCollection.Text = "";
+            txtbLivreAuteur.Text = "";
+            dgvListeComLivre.DataSource = "";
         }
 
         /// <summary>
@@ -1361,7 +1381,7 @@ namespace MediaTekDocuments.view
         /// <summary>
         /// Remplit le dategrid avec la liste reçue en paramètre
         /// </summary>
-        /// <param name="commandesLivre">liste de commmandes</param>
+        /// <param name="lesCommandesLivre">liste de commmandes</param>
         private void RemplirCommandesLivreListe(List<CommandeDocument> lesCommandesLivre)
         {
             if (lesCommandesLivre != null)
@@ -1456,7 +1476,7 @@ namespace MediaTekDocuments.view
                 }
                 catch
                 {
-                    Log.Information("Erreur de convertion des champs 'nombre exempalires' et 'montant'");
+                    Log.Information("Erreur de conversion des champs 'nombre exempalires' et 'montant'");
                     MessageBox.Show("le nombre d'exemplaires et le montant doivent être numériques", "Information");
                 }
             }
@@ -1538,6 +1558,23 @@ namespace MediaTekDocuments.view
         {
             ChargerComboSuivi();
             txtbRechercheNum.Text = "";
+            ViderZoneInfoDvd();
+        }
+
+        /// <summary>
+        /// vide les zones d'affichage des infos du Dvd
+        /// </summary>
+        private void ViderZoneInfoDvd()
+        {
+            txtbCheminImDvd.Text = "";
+            txtbDureeDvd.Text = "";
+            txtbGenreDvd.Text = "";
+            txtbPublicDvd.Text = "";
+            txtbRayonDvd.Text = "";
+            txtbRealisateurDvd.Text = "";
+            txtbSynopsisDvd.Text = "";
+            txtbTitreDvd.Text = "";
+            dgvCommandeDvd.DataSource = "";
         }
 
         /// <summary>
@@ -1681,7 +1718,7 @@ namespace MediaTekDocuments.view
                 }
                 catch
                 {
-                    Log.Information("Erreur de convertion des champs 'nombre exemplaires' et 'montant'");
+                    Log.Information("Erreur de conversion des champs 'nombre exemplaires' et 'montant'");
                     MessageBox.Show("le nombre d'exemplaires et le montant doivent être numériques", "Information");
                 }
             }
@@ -1771,6 +1808,22 @@ namespace MediaTekDocuments.view
         private void tabAbonnementRevue_Enter(object sender, EventArgs e)
         {
             txtbNumRechRevue.Text = "";
+            VideZoneInfoRevue();
+        }
+
+        /// <summary>
+        /// vide les zones d'affichage des infos de la revue
+        /// </summary>
+        private void VideZoneInfoRevue()
+        {
+            txtbTitreRevue.Text = "";
+            txtbRayonRevue.Text = "";
+            txtbPublicRevue.Text = "";
+            txtbPeriodiciteRevue.Text = "";
+            txtbGenreRevue.Text = "";
+            txtbDelaiDispoRevue.Text = "";
+            txtbCheminImRevue.Text = "";
+            dgvListeAbonnRevue.DataSource = "";
         }
 
         /// <summary>
@@ -1889,7 +1942,7 @@ namespace MediaTekDocuments.view
                 }
                 catch
                 {
-                    Log.Information("Erreur de convertion du montant en numérique. montant={0}", txtbMontantAbonnRevue.Text);
+                    Log.Information("Erreur de conversion du montant en numérique. montant={0}", txtbMontantAbonnRevue.Text);
                     MessageBox.Show("le montant doit être numérique", "Information");
                 }
 
@@ -1920,26 +1973,7 @@ namespace MediaTekDocuments.view
             RemplirAbonnementsListeRevue(sortedList);
         }
 
-        /// <summary>
-        /// controle que la date de parution des exemplaires se trouve 
-        /// entre la date de la commande et de la fin de l'abonnement
-        /// avant de supprimer une commande d'une revue
-        /// </summary>
-        /// <param name="dateCommande">date de la commande concernée</param>
-        /// <param name="dateFinAbonnement">date de la fin d'abonnement de la revue</param>
-        /// <param name="dateParution">date de parution de l'exempplaire de la revue concerné</param>
-        /// <returns>true si la date de parution est comprise entre les 2</returns>
-        static private bool ParutionDansAbonnement(DateTime dateCommande, DateTime dateFinAbonnement, DateTime dateParution)
-        {
-            if (dateParution.CompareTo(dateCommande) >= 0 && dateParution.CompareTo(dateFinAbonnement) < 0)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
+        
 
         /// <summary>
         /// supprime la commande d'une revue à condition qu'aucun exemplaire n'y soit rattaché
@@ -1953,7 +1987,7 @@ namespace MediaTekDocuments.view
             string idRevue = txtbNumRechRevue.Text;
             lesExemplaires = controller.GetExemplairesRevue(idRevue);            
 
-            bool okSuppr = !lesExemplaires.Any(ex => ParutionDansAbonnement(abonnementRevue.DateCommande, abonnementRevue.DateFinAbonnement, ex.DateAchat));
+            bool okSuppr = !lesExemplaires.Any(ex => controller.ParutionDansAbonnement(abonnementRevue.DateCommande, abonnementRevue.DateFinAbonnement, ex.DateAchat));
 
             if (okSuppr)
             {
@@ -1967,7 +2001,10 @@ namespace MediaTekDocuments.view
             }
 
         }
+
+
         #endregion
 
+        
     }
 }

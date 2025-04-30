@@ -262,6 +262,8 @@ namespace MediaTekDocuments.view
             this.dtpDateFinAbonn = new System.Windows.Forms.DateTimePicker();
             this.dtpDateComRevue = new System.Windows.Forms.DateTimePicker();
             this.grpbInfoRevue = new System.Windows.Forms.GroupBox();
+            this.btnSupprAbonn = new System.Windows.Forms.Button();
+            this.label103 = new System.Windows.Forms.Label();
             this.dgvListeAbonnRevue = new System.Windows.Forms.DataGridView();
             this.label99 = new System.Windows.Forms.Label();
             this.pctbImRevue = new System.Windows.Forms.PictureBox();
@@ -283,8 +285,6 @@ namespace MediaTekDocuments.view
             this.btnRechNumRevue = new System.Windows.Forms.Button();
             this.txtbNumRechRevue = new System.Windows.Forms.TextBox();
             this.label90 = new System.Windows.Forms.Label();
-            this.label103 = new System.Windows.Forms.Label();
-            this.btnSupprAbonn = new System.Windows.Forms.Button();
             this.tabCommandeLivre.SuspendLayout();
             this.tabLivres.SuspendLayout();
             this.grpLivresInfos.SuspendLayout();
@@ -342,7 +342,6 @@ namespace MediaTekDocuments.view
             this.tabCommandeLivre.SelectedIndex = 0;
             this.tabCommandeLivre.Size = new System.Drawing.Size(1177, 811);
             this.tabCommandeLivre.TabIndex = 0;
-            this.tabCommandeLivre.Enter += new System.EventHandler(this.tabCommandeLivre_Enter);
             // 
             // tabLivres
             // 
@@ -2077,6 +2076,7 @@ namespace MediaTekDocuments.view
             this.tabComLivre.TabIndex = 5;
             this.tabComLivre.Text = "Commandes livres";
             this.tabComLivre.UseVisualStyleBackColor = true;
+            this.tabComLivre.Enter += new System.EventHandler(this.tabComLivre_Enter);
             // 
             // btnLivreRechercheNum
             // 
@@ -2929,6 +2929,27 @@ namespace MediaTekDocuments.view
             this.grpbInfoRevue.TabStop = false;
             this.grpbInfoRevue.Text = "Informations revue";
             // 
+            // btnSupprAbonn
+            // 
+            this.btnSupprAbonn.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnSupprAbonn.Location = new System.Drawing.Point(958, 402);
+            this.btnSupprAbonn.Name = "btnSupprAbonn";
+            this.btnSupprAbonn.Size = new System.Drawing.Size(156, 31);
+            this.btnSupprAbonn.TabIndex = 19;
+            this.btnSupprAbonn.Text = "Supprimer";
+            this.btnSupprAbonn.UseVisualStyleBackColor = true;
+            this.btnSupprAbonn.Click += new System.EventHandler(this.btnSupprAbonn_Click);
+            // 
+            // label103
+            // 
+            this.label103.AutoSize = true;
+            this.label103.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label103.Location = new System.Drawing.Point(599, 413);
+            this.label103.Name = "label103";
+            this.label103.Size = new System.Drawing.Size(199, 16);
+            this.label103.TabIndex = 18;
+            this.label103.Text = "Supprimer une commande : ";
+            // 
             // dgvListeAbonnRevue
             // 
             this.dgvListeAbonnRevue.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
@@ -3115,27 +3136,6 @@ namespace MediaTekDocuments.view
             this.label90.Size = new System.Drawing.Size(134, 16);
             this.label90.TabIndex = 0;
             this.label90.Text = "Numéro de revue :";
-            // 
-            // label103
-            // 
-            this.label103.AutoSize = true;
-            this.label103.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label103.Location = new System.Drawing.Point(599, 413);
-            this.label103.Name = "label103";
-            this.label103.Size = new System.Drawing.Size(199, 16);
-            this.label103.TabIndex = 18;
-            this.label103.Text = "Supprimer une commande : ";
-            // 
-            // btnSupprAbonn
-            // 
-            this.btnSupprAbonn.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnSupprAbonn.Location = new System.Drawing.Point(958, 402);
-            this.btnSupprAbonn.Name = "btnSupprAbonn";
-            this.btnSupprAbonn.Size = new System.Drawing.Size(156, 31);
-            this.btnSupprAbonn.TabIndex = 19;
-            this.btnSupprAbonn.Text = "Supprimer";
-            this.btnSupprAbonn.UseVisualStyleBackColor = true;
-            this.btnSupprAbonn.Click += new System.EventHandler(this.btnSupprAbonn_Click);
             // 
             // FrmMediatek
             // 

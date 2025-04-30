@@ -7,6 +7,9 @@ using System.Windows.Forms;
 
 namespace MediaTekDocuments.view
 {
+    /// <summary>
+    /// classe d'affichage fenetre liste abonnements
+    /// </summary>
     public partial class FrmAlerteAbonnement : Form
     {
         private readonly FrmAlerteAbonnementController controller;
@@ -64,11 +67,7 @@ namespace MediaTekDocuments.view
             List<Revue> revues = controller.GetAllRevues();
 
             // Création de la vue pour affichage
-            List<AbonnFinProche> vues = finAbonnements.Select(a => new AbonnFinProche
-            {
-                TitreRevue = revues.FirstOrDefault(r => r.Id == a.IdRevue).Titre,
-                DateFin = a.DateFinAbonnement,
-            }).ToList();
+            List<AbonnFinProche> vues = finAbonnements.Select(a => new AbonnFinProche(revues.FirstOrDefault(r => r.Id == a.IdRevue).Titre, a.DateFinAbonnement)).ToList();            
             bdgAbonnementRevueListe.DataSource = vues;
             dgvListeFinAbonn.DataSource = bdgAbonnementRevueListe;
             dgvListeFinAbonn.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;

@@ -44,12 +44,17 @@ namespace MediaTekDocuments.dal
         private const String DELETE = "DELETE";
 
         /// <summary>
+        /// nom de la chaine de connexion à l'Api
+        /// </summary>
+        private static readonly string connectionName = "MediatekDocuments.connectionStringApi";
+
+        /// <summary>
         /// Méthode privée pour créer un singleton
         /// initialise l'accès à l'API
         /// </summary>
         private Access()
         {            
-            String authenticationString = null;
+            string connectionString = null;            
             try
             {
                 Log.Logger = new LoggerConfiguration()
@@ -57,12 +62,12 @@ namespace MediaTekDocuments.dal
                 .WriteTo.Console()
                 .WriteTo.File("logs/log.txt", rollingInterval: RollingInterval.Day)
                 .CreateLogger();
-                authenticationString = ConfigurationManager.AppSettings["login"];
-                api = ApiRest.GetInstance(uriApi, authenticationString);
+                connectionString = GetConnectionStringByName(connectionName);                
+                api = ApiRest.GetInstance(uriApi, connectionString);
             }
             catch (Exception e)
-            {                
-                Console.WriteLine(e.Message);
+            {
+                Log.Fatal("Access.Access catch connectionString={0} erreur={1}", connectionString, e.Message);                
                 Environment.Exit(0);
             }
         }
@@ -78,6 +83,20 @@ namespace MediaTekDocuments.dal
                 instance = new Access();
             }
             return instance;
+        }
+
+        /// <summary>
+        /// récupération des infos de connexion à l'Api
+        /// </summary>
+        /// <param name="name">chaine d'infos concernée</param>
+        /// <returns>info de connexion</returns>
+        public static string GetConnectionStringByName(string name)
+        {
+            string returnValue = null;
+            ConnectionStringSettings settings = ConfigurationManager.ConnectionStrings[name];
+            if (settings != null)
+                returnValue = settings.ConnectionString;
+            return returnValue;
         }
 
         /// <summary>
@@ -166,8 +185,8 @@ namespace MediaTekDocuments.dal
                 return (liste != null);
             }
             catch (Exception ex)
-            {                
-                Console.WriteLine(ex.Message);
+            {
+                Log.Error(ex,"Erreur lors de la création d'un exemplaire");                
             }
             return false;
         }
@@ -201,12 +220,12 @@ namespace MediaTekDocuments.dal
                 }
                 else
                 {
-                    Console.WriteLine("code erreur = " + code + " message = " + (String)retour["message"]);
+                    Log.Error("Code erreur, retour différent de 200");                    
                 }
             }
             catch (Exception e)
             {
-                Console.WriteLine("Erreur lors de l'accès à l'API : " + e.Message);
+                Log.Error(e, "Erreur lors de l'accès à l'API");                
                 Environment.Exit(0);
             }
             return liste;
@@ -215,8 +234,8 @@ namespace MediaTekDocuments.dal
         /// <summary>
         /// Convertit en json un couple nom/valeur
         /// </summary>
-        /// <param name="nom"></param>
-        /// <param name="valeur"></param>
+        /// <param name="nom">nom du couple</param>
+        /// <param name="valeur">valeur du couple</param>
         /// <returns>couple au format json</returns>
         static private String ConvertToJson(Object nom, Object valeur)
         {
@@ -301,7 +320,7 @@ namespace MediaTekDocuments.dal
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                Log.Error(ex, "Erreur lors de la création de la commande");                
             }
             return false;
         }
@@ -322,7 +341,7 @@ namespace MediaTekDocuments.dal
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                Log.Error(ex, "Erreur lors de la création de la commande d'un document");                
             }
             return false;
         }
@@ -344,7 +363,7 @@ namespace MediaTekDocuments.dal
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                Log.Error(ex, "Erreur lors de la mise à jour du statut de la commande");                
             }
             return false;
         }
@@ -364,7 +383,7 @@ namespace MediaTekDocuments.dal
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                Log.Error(ex, "Erreur lors de la suppression de la commande");                
             }
             return false;
         }
@@ -397,7 +416,7 @@ namespace MediaTekDocuments.dal
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                Log.Error(ex, "Erreur lors de la création d'un abonnement à la revue");                
             }
             return false;
         }
@@ -416,7 +435,7 @@ namespace MediaTekDocuments.dal
         /// convertit en json un profil contenant les couples objet/valeur
         /// login et pwd
         /// </summary>
-        /// <param name="profil"></param>
+        /// <param name="profil">profil concerné</param>
         /// <returns>les couples au format json</returns>
         static private string ConvertProfilToJson(Profil profil)
         {
@@ -446,7 +465,7 @@ namespace MediaTekDocuments.dal
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                Log.Error(ex, "Erreur lors de l'authentification de l'utilisateur à l'application");                
             }
             return new List<Users>();
         }

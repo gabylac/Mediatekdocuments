@@ -28,12 +28,12 @@ namespace MediaTekDocuments.manager
         /// </summary>
         /// <param name="uriApi">adresse de l'api</param>
         /// <param name="authenticationString">chaîne d'authentification</param>
-        private ApiRest(String uriApi, String authenticationString = "")
+        private ApiRest(String uriApi, String authenticationString)
         {
             httpClient = new HttpClient() { BaseAddress = new Uri(uriApi) };
             // prise en compte dans l'url de l'authentificaiton (basic authorization), si elle n'est pas vide
             if (!String.IsNullOrEmpty(authenticationString))
-            {
+            {                
                 String base64EncodedAuthenticationString = Convert.ToBase64String(System.Text.ASCIIEncoding.ASCII.GetBytes(authenticationString));
                 httpClient.DefaultRequestHeaders.Add("Authorization", "Basic " + base64EncodedAuthenticationString);
             }
@@ -43,13 +43,13 @@ namespace MediaTekDocuments.manager
         /// Crée une instance unique de la classe
         /// </summary>
         /// <param name="uriApi">adresse de l'api</param>
-        /// <param name="authenticationString">chaîne d'authentificatio (login:pwd)</param>
-        /// <returns></returns>
-        public static ApiRest GetInstance(String uriApi, String authenticationString)
+        /// <param name="connectionString">chaîne d'authentificatio (login:pwd)</param>
+        /// <returns>instance</returns>
+        public static ApiRest GetInstance(String uriApi, String connectionString)
         {
             if (instance == null)
             {
-                instance = new ApiRest(uriApi, authenticationString);
+                instance = new ApiRest(uriApi, connectionString);
             }
             return instance;
         }
@@ -104,7 +104,6 @@ namespace MediaTekDocuments.manager
                 Console.WriteLine("Le contenu retourné n'est pas un JSON valide !");
                 return null;
             }
-
 
         }
 
