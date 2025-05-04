@@ -18,7 +18,7 @@ namespace MediaTekDocuments.dal
         /// <summary>
         /// adresse de l'API
         /// </summary>
-        private static readonly string uriApi = "http://localhost/rest_mediatekdocuments/";
+        private static readonly string uriApi = "https://mediatekdocuments.eu";
         /// <summary>
         /// instance unique de la classe
         /// </summary>
@@ -46,7 +46,7 @@ namespace MediaTekDocuments.dal
         /// <summary>
         /// nom de la chaine de connexion à l'Api
         /// </summary>
-        private static readonly string connectionName = "MediatekDocuments.connectionStringApi";
+        //private static readonly string connectionName = "MediatekDocuments.connectionStringApi";
 
         /// <summary>
         /// Méthode privée pour créer un singleton
@@ -62,7 +62,7 @@ namespace MediaTekDocuments.dal
                 .WriteTo.Console()
                 .WriteTo.File("logs/log.txt", rollingInterval: RollingInterval.Day)
                 .CreateLogger();
-                connectionString = GetConnectionStringByName(connectionName);                
+                //connectionString = GetConnectionStringByName(connectionName);                
                 api = ApiRest.GetInstance(uriApi, connectionString);
             }
             catch (Exception e)
@@ -90,14 +90,14 @@ namespace MediaTekDocuments.dal
         /// </summary>
         /// <param name="name">chaine d'infos concernée</param>
         /// <returns>info de connexion</returns>
-        public static string GetConnectionStringByName(string name)
+        /*public static string GetConnectionStringByName(string name)
         {
             string returnValue = null;
             ConnectionStringSettings settings = ConfigurationManager.ConnectionStrings[name];
             if (settings != null)
                 returnValue = settings.ConnectionString;
             return returnValue;
-        }
+        }*/
 
         /// <summary>
         /// Retourne tous les genres à partir de la BDD

@@ -32,11 +32,11 @@ namespace MediaTekDocuments.manager
         {
             httpClient = new HttpClient() { BaseAddress = new Uri(uriApi) };
             // prise en compte dans l'url de l'authentificaiton (basic authorization), si elle n'est pas vide
-            if (!String.IsNullOrEmpty(authenticationString))
+            /*if (!String.IsNullOrEmpty(authenticationString))
             {                
                 String base64EncodedAuthenticationString = Convert.ToBase64String(System.Text.ASCIIEncoding.ASCII.GetBytes(authenticationString));
                 httpClient.DefaultRequestHeaders.Add("Authorization", "Basic " + base64EncodedAuthenticationString);
-            }
+            }*/
         }
 
         /// <summary>
